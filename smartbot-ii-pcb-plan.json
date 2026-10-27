@@ -1,0 +1,172 @@
+{
+  "project": "SmartBot II",
+  "document": "Concept PCB integration plan",
+  "exportedAt": "2026-10-27T15:16:17.794Z",
+  "version": 1,
+  "boards": [
+    {
+      "id": "ctrl-01",
+      "type": "esp32",
+      "area": "torso",
+      "notes": ""
+    },
+    {
+      "id": "drv-01",
+      "type": "motor",
+      "area": "left-arm",
+      "notes": ""
+    },
+    {
+      "id": "drv-02",
+      "type": "motor",
+      "area": "right-arm",
+      "notes": ""
+    }
+  ],
+  "completed": [],
+  "selectedArea": "left-arm",
+  "assumptions": [
+    "Illustrative body zones and board outlines; not to scale.",
+    "No verified mechanical dimensions, board footprints, motor ratings, rail voltages, or GPIO assignments.",
+    "Connections describe functional roles only, not a fabrication-ready schematic.",
+    "Checklist completion is self-recorded and does not certify design safety."
+  ],
+  "placements": [
+    {
+      "id": "ctrl-01",
+      "type": "esp32",
+      "area": "torso",
+      "notes": "",
+      "name": "ESP32-S3 controller",
+      "bodyArea": "Torso",
+      "verification": "Mechanical fit, supply, interface, and pinout unverified"
+    },
+    {
+      "id": "drv-01",
+      "type": "motor",
+      "area": "left-arm",
+      "notes": "",
+      "name": "Motor controller 01",
+      "bodyArea": "Left arm",
+      "verification": "Mechanical fit, supply, interface, and pinout unverified"
+    },
+    {
+      "id": "drv-02",
+      "type": "motor",
+      "area": "right-arm",
+      "notes": "",
+      "name": "Motor controller 02",
+      "bodyArea": "Right arm",
+      "verification": "Mechanical fit, supply, interface, and pinout unverified"
+    }
+  ],
+  "conceptConnections": [
+    {
+      "name": "Regulated logic supply",
+      "kind": "power",
+      "from": "Protected source → regulator",
+      "to": "ESP32-S3 · Torso",
+      "openDecision": "Input voltage and regulator not specified"
+    },
+    {
+      "name": "Motor power → Motor controller 01",
+      "kind": "power",
+      "from": "Protected source → motor rail",
+      "to": "Motor controller 01 · Left arm",
+      "openDecision": "Motor rail, current rating, and protection not specified"
+    },
+    {
+      "name": "Control → Motor controller 01",
+      "kind": "signal",
+      "from": "ESP32-S3 · Torso",
+      "to": "Motor controller 01 · Left arm",
+      "openDecision": "Interface, GPIOs, and feedback not specified"
+    },
+    {
+      "name": "Motor power → Motor controller 02",
+      "kind": "power",
+      "from": "Protected source → motor rail",
+      "to": "Motor controller 02 · Right arm",
+      "openDecision": "Motor rail, current rating, and protection not specified"
+    },
+    {
+      "name": "Control → Motor controller 02",
+      "kind": "signal",
+      "from": "ESP32-S3 · Torso",
+      "to": "Motor controller 02 · Right arm",
+      "openDecision": "Interface, GPIOs, and feedback not specified"
+    }
+  ],
+  "integration": [
+    {
+      "step": 1,
+      "title": "Identify the exact hardware",
+      "checks": [
+        "Record the exact ESP32-S3 board and revision, and obtain its schematic and pinout.",
+        "Choose actuator types and document voltage, stall current, feedback, and joint-load requirements.",
+        "Select motor controllers matched to those actuators and list their control interfaces."
+      ],
+      "complete": false
+    },
+    {
+      "step": 2,
+      "title": "Confirm mechanical fit",
+      "checks": [
+        "Measure board outlines, hole positions, connector envelopes, and the usable enclosure volume.",
+        "Plan insulated mounts, tool access, cooling, and antenna clearance.",
+        "Move each unpowered joint through its travel to check harness slack, pinch points, and clearances."
+      ],
+      "complete": false
+    },
+    {
+      "step": 3,
+      "title": "Plan power and protection",
+      "checks": [
+        "Specify the source, regulated logic input, motor rail, current budget, wiring, connectors, and protection.",
+        "Review polarity, grounding or isolation, return-current paths, noise control, and backfeed prevention.",
+        "Design an independent hardware stop and support strategy for joints that may fall when power is removed."
+      ],
+      "complete": false
+    },
+    {
+      "step": 4,
+      "title": "Map signals and feedback",
+      "checks": [
+        "Choose the actual driver interface: PWM/DIR, UART, or a compatible bus; verify logic-level compatibility.",
+        "Allocate GPIOs after reviewing USB, boot straps, memory reservations, and peripheral conflicts.",
+        "Document enable/default-off behavior, feedback, fault reporting, watchdogs, and any required transceivers or isolation."
+      ],
+      "complete": false
+    },
+    {
+      "step": 5,
+      "title": "Assemble with power removed",
+      "checks": [
+        "Mount and insulate the boards; check fastener clearance, strain relief, and connectors.",
+        "Verify polarity, connector pin numbering, continuity, and the absence of shorts using appropriate instruments.",
+        "Recheck separated high-current routes, signal-return paths, and mechanical clearance."
+      ],
+      "complete": false
+    },
+    {
+      "step": 6,
+      "title": "Bench-test the controller",
+      "checks": [
+        "Keep actuators and motor power disconnected; verify the intended logic rails and current draw.",
+        "Load a minimal firmware test and inspect control outputs with suitable instruments.",
+        "Confirm default-disabled outputs, fault handling, watchdog response, and no unintended powering through signal lines."
+      ],
+      "complete": false
+    },
+    {
+      "step": 7,
+      "title": "Commission one supported joint",
+      "checks": [
+        "Secure the joint and robot against motion or collapse; use the reviewed power and stop arrangements.",
+        "Begin with limited commands and conservative current/torque limits appropriate to the actual mechanism.",
+        "Verify direction, feedback, limits, stop behavior, wiring temperature, and driver faults; record results before extending the system."
+      ],
+      "complete": false
+    }
+  ]
+}
